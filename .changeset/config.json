@@ -1,0 +1,11 @@
+{
+  "changelog": [
+    "@changesets/changelog-github",
+    {
+      "repo": "ageha734/equal-frontend"
+    }
+  ],
+  "commit": false,
+  "access": "public",
+  "baseBranch": "master"
+}

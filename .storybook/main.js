@@ -1,12 +1,8 @@
-import type { StorybookConfig } from '@storybook/nextjs';
-
-const path = require("path");
-const rootPath = path.resolve(__dirname, "../src/");
-
-const storybookConfig: StorybookConfig = {
+/** @type { import('@storybook/nextjs').StorybookConfig } */
+const storybookConfig = {
   stories: [
-    '../components/**/*.stories.mdx',
-    '../components/**/*.stories.@(|ts|tsx)'
+    '../app/_components/**/*.stories.mdx',
+    '../app/_components/**/*.stories.@(|ts|tsx)'
   ],
   addons: [
     '@storybook/addon-links',
@@ -20,8 +16,16 @@ const storybookConfig: StorybookConfig = {
   docs: {
     autodocs: 'tag',
   },
+  typescript: { reactDocgen: false },
   staticDirs: ["../public"],
-  webpackFinal: async (config) => {
+  webpackFinal: (config) => {
+    config.resolve = {
+      extensions: [".ts", ".tsx", ".css", ".scss"],
+      fallback: {
+        fs: false,
+        path: false,
+      },
+    };
     config.module.rules.push({
       test: /\.scss$/,
       use: [
@@ -29,6 +33,7 @@ const storybookConfig: StorybookConfig = {
         {
           loader: "css-loader",
           options: {
+            importLoaders: 1,
             modules: {
               auto: true,
             },
@@ -37,11 +42,10 @@ const storybookConfig: StorybookConfig = {
         },
         "sass-loader",
       ],
-      include: path.resolve(__dirname, "../src/"),
+      include: path.resolve(__dirname, "../"),
     });
     if (config.module?.rules) {
       config.module.rules = config.module.rules.map((rule) => {
-        // HACK: Override SVG loader to not use file-loader
         if (rule !== '...' && rule.test?.toString().indexOf('svg') !== -1) {
           rule.exclude = /\.svg$/
         }
@@ -53,7 +57,6 @@ const storybookConfig: StorybookConfig = {
         issuer: /\.tsx$/,
       })
     }
-    config.resolve.alias["@"] = rootPath;
     return config
   },
 }

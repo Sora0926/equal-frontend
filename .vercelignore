@@ -1,0 +1,10 @@
+/*
+!.npmrc
+!app
+!style
+!public
+!next.config.js
+!windi.config.js
+!package.json
+!pnpm-lock.yaml
+!vercel.json

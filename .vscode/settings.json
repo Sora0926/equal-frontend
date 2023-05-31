@@ -5,18 +5,32 @@
     "source.fixAll.eslint": true,
     "source.fixAll.stylelint": true
   },
+  "typescript.tsdk": "./node_modules/typescript/lib",
   "css.validate": false,
   "scss.validate": false,
   "workbench.editor.enablePreview": false,
   "files.insertFinalNewline": true,
+  "files.trimTrailingWhitespace": true,
+  "files.associations": {
+    ".markdownlint.json": "jsonc",
+    ".markdownlintignore": "ignore"
+  },
   "editor.formatOnSave": true,
   "editor.tabSize": 2,
   "editor.minimap.enabled": false,
   "diffEditor.maxComputationTime": 0,
   "settingsSync.ignoredExtensions": [],
+  "search.exclude": {
+    "**/.git/": true,
+    ".nyc_output/": true,
+    ".vscode/": true,
+    "dist/": true,
+    "ava.config.cjs": true,
+    "rollup.config.cjs": true,
+    "yarn.lock": true
+  },
   "eslint.validate": [
     "html",
-    "javascriptreact",
     "typescriptreact"
   ],
   "stylelint.enable": true,
@@ -24,19 +38,20 @@
     "css",
     "scss"
   ],
-  "[javascript]": {
-    "editor.formatOnSave": true
-  },
-  "[javascriptreact]": {
-    "editor.formatOnSave": true
-  },
   "[json]": {
-    "editor.formatOnSave": true
+    "editor.defaultFormatter": "vscode.json-language-features",
+    "editor.formatOnSave": false
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "vscode.json-language-features",
+    "editor.formatOnSave": false
   },
   "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.formatOnSave": true
   },
   "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.formatOnSave": true
   },
   "[markdown]": {

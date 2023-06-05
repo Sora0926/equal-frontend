@@ -1,0 +1,92 @@
+{
+  "extends": [
+    "@commitlint/config-conventional"
+  ],
+  "rules": {
+    "type-enum": [
+      2,
+      "always",
+      [
+        "fix",
+        "hotfix",
+        "add",
+        "update",
+        "change",
+        "clean",
+        "disable",
+        "remove",
+        "upgrade",
+        "revert"
+      ]
+    ]
+  },
+  "type-case": [
+    2,
+    "always",
+    "lowerCase"
+  ],
+  "type-empty": [
+    2,
+    "never"
+  ],
+  "subject-case": [
+    2,
+    "always",
+    "sentence-case"
+  ],
+  "scope-enum": [
+    2,
+    "never"
+  ],
+  "subject-full-stop": [
+    2,
+    "never",
+    "."
+  ],
+  "header-max-length": [
+    2,
+    "always",
+    72
+  ],
+  "footer-leading-blank": [
+    2,
+    "always"
+  ],
+  "body-leading-blank": [
+    2,
+    "always"
+  ],
+  "subject-empty": [
+    2,
+    "always",
+    [
+      "*",
+      "admin",
+      "exampleScope",
+      "changeMe",
+      "readme",
+      "contributing",
+      "license",
+      "changelog",
+      "docs",
+      "app",
+      "config",
+      "core",
+      "db",
+      "i18n",
+      "lib",
+      "model",
+      "route",
+      "schema",
+      "server",
+      "service",
+      "style",
+      "test",
+      "util",
+      "view",
+      "merge",
+      "e2eTest",
+      "unitTest"
+    ]
+  ]
+}

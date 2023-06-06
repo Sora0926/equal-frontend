@@ -1,0 +1,57 @@
+{
+  "extends": [
+    "stylelint-config-recommended",
+    "stylelint-config-standard",
+    "stylelint-config-recess-order",
+    "stylelint-config-prettier"
+  ],
+  "plugins": [
+    "stylelint-scss",
+    "stylelint-a11y",
+    "stylelint-value-no-unknown-custom-properties",
+    "stylelint-csstree-validator",
+    "stylelint-declaration-block-no-ignored-properties",
+    "stylelint-no-unsupported-browser-features",
+    "stylelint-prettier"
+  ],
+  "rules": {
+    "at-rule-no-unknown": null,
+    "scss/at-rule-no-unknown": true,
+    "a11y/font-size-is-readable": true,
+    "a11y/media-prefers-reduced-motion": true,
+    "a11y/no-outline-none": true,
+    "a11y/selector-pseudo-class-focus": true,
+    "csstools/value-no-unknown-custom-properties": true,
+    "plugin/declaration-block-no-ignored-properties": true,
+    "plugin/no-unsupported-browser-features": [
+      true,
+      {
+        "ignorePartialSupport": true,
+        "severity": "warning"
+      }
+    ],
+    "prettier/prettier": [
+      true,
+      {
+        "singleQuote": false
+      }
+    ],
+    "font-family-no-missing-generic-family-keyword": true,
+    "declaration-block-no-shorthand-property-overrides": true,
+    "declaration-block-trailing-semicolon": "always",
+    "selector-pseudo-element-colon-notation": "double",
+    "selector-class-pattern": null
+  },
+  "overrides": [
+    {
+      "files": [
+        "**/*.{ts,tsx}"
+      ],
+      "customSyntax": "@stylelint/postcss-css-in-js",
+      "rules": {
+        "function-name-case": null,
+        "function-no-unknown": null
+      }
+    }
+  ]
+}

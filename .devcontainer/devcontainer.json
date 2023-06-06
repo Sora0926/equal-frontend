@@ -1,0 +1,69 @@
+{
+  // Dev Container の名称設定
+  "name": "test-devcontainer",
+  // コンテナ立ち上げ時のオプションの指定
+  // --name ビルドするDocker containerの名称の指定
+  // これを指定しないとランダムに生成される
+  "runArgs": [
+    "--name=test-devcontainer"
+  ],
+  // Docker コンテナイメージ
+  "image": "mcr.microsoft.com/devcontainers/base:jammy",
+  // VS Codeの設定
+  "settings": {
+    "stylelint.validate": [
+      "css",
+      "scss"
+    ],
+    "scss.validate": false,
+    "css.validate": false,
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": true,
+      "source.fixAll.stylelint": true
+    },
+    // sticky scrollの設定
+    "editor.stickyScroll.enabled": true,
+    "editor.stickyScroll.maxLineCount": 5,
+    "workbench.colorCustomizations": {
+      "editorStickyScroll.background": "#00708D",
+      "editorStickyScrollHover.background": "#59A2B5"
+    },
+    // typescript で絶対パスで import する設定
+    "typescript.preferences.importModuleSpecifier": "non-relative"
+  },
+  // 追加する VS Code の拡張機能
+  "extensions": [
+    "ms-vscode.live-server",
+    "dbaeumer.vscode-eslint",
+    "stylelint.vscode-stylelint",
+    "Syler.sass-indented",
+    "esbenp.prettier-vscode",
+    "ms-python.python",
+    "streetsidesoftware.code-spell-checker",
+    "naumovs.color-highlight",
+    "burkeholland.simple-react-snippets",
+    "formulahendry.auto-rename-tag",
+    "MariusAlchimavicius.json-to-ts",
+    "dsznajder.es7-react-js-snippets",
+    "styled-components.vscode-styled-components",
+    "Gruntfuggly.todo-tree",
+    "42Crunch.vscode-openapi",
+    "mhutchie.git-graph"
+  ],
+  // コンテナ内の実行ユーザーの設定 (推奨設定)
+  "remoteUser": "vscode",
+  // インストールするライブラリ
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "lts"
+    },
+    "ghcr.io/devcontainers/features/python:1": {
+      "version": "3.9"
+    }
+  },
+  // Dev Container 作成時に実行するコマンド
+  "postCreateCommand": "sh .devcontainer/post-create.sh",
+  "postStartCommand": "sh .devcontainer/post-start.sh"
+}

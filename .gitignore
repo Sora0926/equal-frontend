@@ -149,3 +149,6 @@ next-env.d.ts
 
 # spelling list file
 spellingError.json
+
+# NYC coverage output
+.nyc_output

@@ -6,6 +6,7 @@
   "singleQuote": true,
   "rangeStart": 0,
   "requirePragma": true,
-  "proseWrap": "always",
-  "endOfLine": "lf"
+  "proseWrap": "preserve",
+  "endOfLine": "lf",
+  "arrowParens": "always"
 }

@@ -2,6 +2,9 @@ name: PR(Pull Request Lint Check with Reviewdog Action)
 
 on: [pull_request]
 
+env:
+  PNPM_CACHE_FOLDER: .pnpm-store
+
 jobs:
   build:
     name: PR

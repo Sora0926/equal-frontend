@@ -18,7 +18,6 @@
     "prepare": "husky install",
     "lint-staged": "lint-staged --config .lintstagedrc",
     "changeset": "changeset",
-    "publish": "pnpm publish -r",
     "dev": "next dev",
     "start": "next start",
     "build": "next build",

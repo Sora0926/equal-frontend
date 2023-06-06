@@ -12,6 +12,10 @@ on:
 permissions:
   contents: write
 
+env:
+  PNPM_CACHE_FOLDER: .pnpm-store
+
+
 jobs:
   build:
     name: Release

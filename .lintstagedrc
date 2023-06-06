@@ -1,0 +1,24 @@
+{
+  "*.{ts,tsx}": [
+    "tsc --noEmit"
+  ],
+  "*.@(ts|tsx)": [
+    "eslint --fix",
+    "prettier --write"
+  ],
+  "*.@(ts|tsx)": [
+    "stylelint --fix",
+    "prettier --write"
+  ],
+  "*.@{md,mdx}": [
+    "eslint --fix",
+    "prettier --write"
+  ],
+  "*.test.@(ts|tsx)": [
+    "jest"
+  ],
+  "*.@(css|scss|sass)": [
+    "stylelint --fix",
+    "prettier --write"
+  ]
+}

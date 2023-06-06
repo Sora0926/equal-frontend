@@ -1,0 +1,19 @@
+{
+  "check-coverage": true,
+  "per-file": true,
+  "lines": 100,
+  "statements": 100,
+  "functions": 100,
+  "branches": 100,
+  "exclude": [],
+  "nyc": {
+    "all": true,
+    "check-coverage": true,
+    "include": [],
+    "exclude": []
+  },
+  "reporter": "html",
+  "report-dir": "test",
+  "temp-dir": ".nyc_output",
+  "sourceMap": true
+}

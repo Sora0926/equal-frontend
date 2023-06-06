@@ -1,4 +1,4 @@
-name: Semantic release
+name: Semantic release(Relase automation)
 
 on:
   workflow_run:
@@ -12,10 +12,18 @@ on:
 permissions:
   contents: write
 
+env:
+  PNPM_CACHE_FOLDER: .pnpm-store
+
+
 jobs:
-  release:
+  build:
     name: Release
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18]
+        pnpm-version: [8]
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
     steps:
@@ -23,21 +31,35 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-
-      - name: Setup Node.js
+      - name: Detect package manager
+        id: detect-package-manager
+        run: |
+          if [ -f "${{ github.workspace }}/pnpm-lock.yaml" ]; then
+            echo "manager=pnpm" >> $GITHUB_OUTPUT
+            echo "command=install --frozen-lockfile" >> $GITHUB_OUTPUT
+            exit 0
+          elif [ -f "${{ github.workspace }}/package.json" ]; then
+            echo "manager=pnpm" >> $GITHUB_OUTPUT
+            echo "command=install" >> $GITHUB_OUTPUT
+            exit 0
+          else
+            echo "Unable to determine package manager"
+            exit 1
+          fi
+      - name: Setup pnpm ${{ matrix.pnpm-version }}
+        uses: pnpm/action-setup@v2
+        with:
+          version: ${{ matrix.pnpm-version }}
+      - name: Setup Node ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
-          node-version: 18
-
-      - uses: pnpm/action-setup@v2
-        with:
-          version: 8
-
+          node-version: ${{ matrix.node-version }}
+          cache: ${{ steps.detect-package-manager.outputs.manager }}
+          cache-dependency-path: pnpm-lock.yaml
       - name: Install dependencies
-        run: pnpm install
-
-      - name: Release
+        run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
+      - name: RUN release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: npx semantic-release
+        run: pnpm dlx semantic-release

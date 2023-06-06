@@ -3,7 +3,6 @@
 **/dist/**
 **/out/**
 **/build/**
-/public
 
 # config
 **/*.min.js

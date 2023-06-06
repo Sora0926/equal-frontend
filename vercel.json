@@ -47,9 +47,11 @@
         ]
       }
     ],
-    "installCommand": "pnpm install --prod",
+    "installCommand": "pnpm install --frozen-lockfile",
     "public": true,
-    "regions": ["hnd1"],
+    "regions": [
+      "hnd1"
+    ],
     "trailingSlash": false,
     "git": {
       "deploymentEnabled": {

@@ -1,63 +1,46 @@
-name: Changesets
+name: Create release tag and release note.
+
 on:
   push:
     branches:
       - master
+
 env:
-  CI: true
-  PNPM_CACHE_FOLDER: .pnpm-store
+    GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    TZ: 'Asia/Tokyo'
 
 jobs:
   build:
     name: Version
     timeout-minutes: 15
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [18]
-        pnpm-version: [8]
     steps:
       - name: Checkout
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      - name: Detect package manager
-        id: detect-package-manager
+      - name: Get previous tag
+        id: pre_tag
         run: |
-          if [ -f "${{ github.workspace }}/pnpm-lock.yaml" ]; then
-            echo "manager=pnpm" >> $GITHUB_OUTPUT
-            echo "command=install --frozen-lockfile" >> $GITHUB_OUTPUT
-            exit 0
-          elif [ -f "${{ github.workspace }}/package.json" ]; then
-            echo "manager=pnpm" >> $GITHUB_OUTPUT
-            echo "command=install" >> $GITHUB_OUTPUT
-            exit 0
-          else
-            echo "Unable to determine package manager"
-            exit 1
+          echo "::set-output name=pre_tag::$(curl -H 'Accept: application/vnd.github.v3+json' -H 'Authorization: token ${{ secrets.GITHUB_TOKEN }}' https://api.github.com/repos/${{ github.repository }}/releases/latest | jq -r .tag_name)"
+      - name: Generate release tag
+        id: release_tag
+        run: |
+          today=$(date +'%Y.%m.%d')
+          pre_release_date=$(echo ${{ steps.pre_tag.outputs.pre_tag }} | awk -F'-' '{print $1}')
+          pre_release_count=$(echo ${{ steps.pre_tag.outputs.pre_tag }} | awk -F'-' '{print $2}')
+          if [[ ! $pre_release_date = $today ]]; then
+            echo "init count"
+            pre_release_count=0
           fi
-      - name: Setup pnpm ${{ matrix.pnpm-version }}
-        uses: pnpm/action-setup@v2
-        with:
-          version: ${{ matrix.pnpm-version }}
-      - name: Setup Node ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: ${{ steps.detect-package-manager.outputs.manager }}
-          cache-dependency-path: pnpm-lock.yaml
-      - name: Setup npmrc
-        run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > .npmrc
-      - name: Setup pnpm config
-        run: pnpm config set store-dir $PNPM_CACHE_FOLDER
-      - name: Install dependencies
-        run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
-      - name: create and publish versions
-        uses: changesets/action@v1
-        with:
-          version: pnpm publish
-          commit: "chore: update versions"
-          title: "chore: update versions"
-          publish: pnpm publish
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          echo "::set-output name=release_tag::$today-$(($pre_release_count + 1))"
+      - name: Generate release note
+        id: release_note
+        run: |
+          echo "::set-output name=release_note::$(curl -X POST -H 'Accept: application/vnd.github.v3+json' -H 'Authorization: token ${{ secrets.GITHUB_TOKEN }}' https://api.github.com/repos/${{ github.repository }}/releases/generate-notes -d '{"tag_name":"${{ steps.release_tag.outputs.release_tag }}", "previous_tag_name":"${{ steps.pre_tag.outputs.pre_tag }}"}' | jq .body | sed 's/"//g')"
+      - name: Create Release
+        run: |
+          curl -X POST \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -d "{ \"tag_name\": \"${{ steps.release_tag.outputs.release_tag }}\", \"name\": \"${{ steps.release_tag.outputs.release_tag }}\", \"body\": \"${{ steps.release_note.outputs.release_note }}\"}" \
+            https://api.github.com/repos/${{ github.repository }}/releases

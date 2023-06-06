@@ -1,0 +1,4 @@
+* text=auto eol=lf
+*.ts linguist-detectable=false
+*.tsx linguist-detectable=false
+/.husky/* linguist-detectable=false

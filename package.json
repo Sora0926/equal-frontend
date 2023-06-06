@@ -8,17 +8,17 @@
     "url": "git+ssh://git@github.com:ageha734/equal-frontend.git"
   },
   "engines": {
-    "node": ">=18.16.0",
-    "pnpm": ">=8.5.0",
+    "node": ">=18",
+    "pnpm": ">=8",
     "npm": "please_use_pnpm_instead",
     "yarn": "please_use_pnpm_instead"
   },
-  "packageManager": "pnpm@8.5.1",
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "prepare": "husky install",
     "lint-staged": "lint-staged --config .lintstagedrc",
     "changeset": "changeset",
+    "publish": "pnpm publish -r",
     "dev": "next dev",
     "start": "next start",
     "build": "next build",

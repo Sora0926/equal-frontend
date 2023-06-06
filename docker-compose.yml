@@ -1,0 +1,55 @@
+version: "3.8"
+services:
+    app:
+      cgroup_parent: Simi
+      container_name: Simi.Next
+      hostname: Simi.app.server
+      build:
+        context: .
+        dockerfile: Dockerfile
+      restart: on-failure
+      tty: true
+      stdin_open: true
+      environment:
+        NODE_ENV: production
+        WATCHPACK_POLLING: true
+      command: >
+        pnpm dev
+      volumes:
+        - type: bind
+          source: .
+          target: /app
+          bind:
+            create_host_path: false
+        - type: volume
+          source: node_modules
+          target: /app/node_modules
+      networks:
+        Simi:
+          ipv4_address: 192.168.0.2
+      ports:
+        - target: 3000
+          published: 3000
+          protocol: tcp
+          mode: host
+        - target: 6006
+          published: 6006
+          protocol: tcp
+          mode: host
+
+networks:
+  Simi:
+    driver: bridge
+    enable_ipv6: false
+    driver_opts:
+      com.docker.network.enable_ipv6: "false"
+    name: Simi.Network
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.0.0/29
+          gateway: 192.168.0.6
+
+volumes:
+  node_modules:
+    driver: local
